@@ -175,11 +175,10 @@ class WavePreparation:
             device = 0
             print("Device {} is chosen.".format(device))
 
-        if set_env_variable:
-            os.environ['PYOPENCL_CTX'] = str(platform) + ':' + str(device)
-            os.environ['PYOPENCL_COMPILER_OUTPUT'] = '1'
+        platform = cl.get_platforms()[inpa["platform"]]
+        device = platform.get_devices()[inpa["device"]]
         
-        self.ctx = cl.create_some_context()
+        self.ctx = cl.Context([device])
         self.queue = cl.CommandQueue(self.ctx)
         
         kernel, kernel_crosswell, kernel_surface = self.kernel_caller()
